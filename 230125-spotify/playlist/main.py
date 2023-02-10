@@ -54,6 +54,9 @@ while True:
                 for track in tracks:
                     print(track['id'])
                     print(track['name'])
+                    print(track['duration(seg)'])
+                    print(track['uri'])
+                    input('¿Qué buscar en Programacion orientada a objetos?')
 
             else:
                 endpoint = f'https://api.spotify.com/v1/users/{user_id}/playlists'
