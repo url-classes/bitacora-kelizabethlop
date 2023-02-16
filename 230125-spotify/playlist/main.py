@@ -1,13 +1,23 @@
 import os
+import sys
 import base64
 import requests
-
+from typing import Optional
+from PyQt6.QtWidgets import QApplication
+from auth_window import AuthWindow
 
 client_id = '2d7800dcec2241389843e017b8ab5e4d'
-client_secret = 'e8f0ce222da24f62881d26db6c2b0291'
+client_secret = '418d5f1d798842fc924c28c8bf6f4124'
 
-while True:
+app = QApplication(sys.argv)
+auth_window = AuthWindow()
+user_id: Optional[str] = None
+
+
+def check_permissions():
+    global user_id
     if os.path.isfile('../token.txt'):
+        # Verificar si el token sigue siendo valido
         f = open('../token.txt', 'r')
         token = f.read()
         f.close()
@@ -20,63 +30,13 @@ while True:
             headers=user_headers
         ).json()
 
-        if 'error' in user_profile_response:
-            print(user_profile_response['error']['message'])
-            os.remove('../token.txt')
-            print('El archivo ../token.txt ha sido eliminado')
-        else:
+        if not ('error' in user_profile_response):
             user_id = user_profile_response['id']
-            user_uri = user_profile_response['uri']
-            if os.path.isfile('../playlist.txt'):
-                f = open('../playlist.txt', 'r')
-                playlist_id = f.read()
-                f.close()
-                endpoint = f'https://api.spotify.com/v1/playlists/{playlist_id}'
-                get_playlist_response = requests.get(
-                    endpoint,
-                    headers=user_headers
-                ).json()
-                playlist_id = get_playlist_response['id']
-                playlist_uri = get_playlist_response['uri']
-                print('Playlist ID:', playlist_id)
-                print('Playlist URI:', playlist_uri)
-                endpoint = f'https://api.spotify.com/v1/search'
-                search_response = requests.get(endpoint, headers=user_headers,
-                                               params={'q': 'Bad bunny',
-                                                       'type': ['track'],
-                                                       'limit': 5,
-                                                       'include_external': 'audio'}).json()
-                print('Resultados de la busqueda:')
-                tracks = search_response['tracks']['items']
-                # duration_ms
-                # name
-                # ID
-                for track in tracks:
-                    print(track['id'])
-                    print(track['name'])
-                    print(track['duration(seg)'])
-                    print(track['uri'])
-                    input('¿Qué buscar en Programacion orientada a objetos?')
-
-            else:
-                endpoint = f'https://api.spotify.com/v1/users/{user_id}/playlists'
-                body = {
-                    "name": "Mi nueva playlist",
-                    "description": "Esta playlist es del curso de Estructura de Datos I"
-                }
-
-                create_playlist_response = requests.post(
-                    endpoint,
-                    json=body,
-                    headers=user_headers
-                ).json()
-
-                playlist_id = create_playlist_response['id']
-                f = open('../playlist.txt', 'w')
-                f.write(playlist_id)
-                print('Se ha creado una playlist:', playlist_id)
+        else:
+            print('Error...')
 
     elif os.path.isfile('../code.txt'):
+        # Verificar si el codigo es valido
         f = open('../code.txt', 'r')
         code = f.read()
         f.close()
@@ -117,13 +77,13 @@ while True:
             os.remove('../code.txt')
             print('El archivo ../code.txt ha sido eliminado')
         except Exception as error:
-            print('No pude eliminar el archivo ../code.txt')
+            print('No puede eliminar el archivo ../code.txt')
             print('Error:', error)
 
-    else:
-        print('No hay credenciales de acceso.')
-        print('Acceda a: http://localhost:7777/authorize')
 
-    option = input('¿Volver a intentar? (s/n): ')
-    if option == 'n':
-        break
+def main():
+    auth_window.show()
+    app.exec()
+
+
+main()

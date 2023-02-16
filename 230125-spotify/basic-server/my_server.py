@@ -2,12 +2,13 @@ from http.server import BaseHTTPRequestHandler
 from urllib import parse
 import webbrowser
 
+
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_path = parse.urlparse(self.path)
 
         if parsed_path.path == '/authorize':
-            client_id = '3u8j2XwGGhJjNbwB2tekad'
+            client_id = '2d7800dcec2241389843e017b8ab5e4d'
             auth_headers = {
                 'client_id': client_id,
                 'response_type': 'code',
