@@ -5,7 +5,11 @@ class AuthWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         login_button = QPushButton('Ingresar')
-        refresh_button = QPushButton('Vover a intentar')
+        login_button.cliked.connect(self.open_browser)
+
+        refresh_button = QPushButton('Volver a intentar')
+        refresh_button.clicked.connect(self.try_again)
+
         layout = QVBoxLayout()
         layout.addWidget(login_button)
         layout.addWidget(refresh_button)
@@ -15,4 +19,8 @@ class AuthWindow(QMainWindow):
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
+ def open_browser(self):
+     webbrowser.open('http://localhost:7777/callback')
+
+def try_again(self):
 
