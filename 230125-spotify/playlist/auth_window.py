@@ -1,12 +1,5 @@
 import webbrowser
-
-from PyQt6.QtWidgets import (
-    QMainWindow,
-    QPushButton,
-    QVBoxLayout,
-    QWidget
-)
-
+from PyQt6.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget
 from communicate import Communicate
 
 
