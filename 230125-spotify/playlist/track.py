@@ -4,4 +4,3 @@ class Track:
         self.duration = duration
         self.album_cover = album_cover
         self.artist = artist
-        

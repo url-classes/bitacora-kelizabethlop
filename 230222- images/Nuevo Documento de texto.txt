@@ -1,0 +1,3 @@
+*Utilizar PyQt6
+*Mostrar una imagen local
+*Mostratr una imagen de internet
