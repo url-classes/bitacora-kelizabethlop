@@ -8,7 +8,7 @@ class MyServer(BaseHTTPRequestHandler):
         parsed_path = parse.urlparse(self.path)
 
         if parsed_path.path == '/authorize':
-            client_id = '5c4f7455363f46f3aa6b5a5182d255b0'
+            client_id = '2d7800dcec2241389843e017b8ab5e4d'
             auth_headers = {
                 'client_id': client_id,
                 'response_type': 'code',

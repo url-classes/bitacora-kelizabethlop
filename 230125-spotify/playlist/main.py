@@ -7,8 +7,8 @@ from PyQt6.QtWidgets import QApplication
 from auth_window import AuthWindow
 from playlist_window import PlaylistWindow
 
-client_id = ''
-client_secret = ''
+client_id = '2d7800dcec2241389843e017b8ab5e4d'
+client_secret = '418d5f1d798842fc924c28c8bf6f4124'
 
 app = QApplication(sys.argv)
 auth_window = AuthWindow()

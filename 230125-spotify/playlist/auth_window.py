@@ -19,8 +19,4 @@ class AuthWindow(QMainWindow):
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
- def open_browser(self):
-     webbrowser.open('http://localhost:7777/callback')
-
-def try_again(self):
 
