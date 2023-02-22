@@ -1,3 +1,6 @@
+import os
+import requests
+
 while True:
     if os.path.isfile('../token.txt'):
         f = open('../token.txt', 'r')
@@ -122,3 +125,4 @@ while True:
     option = input('¿Volver a intentar? (s/n): ')
     if option == 'n':
         break
+
