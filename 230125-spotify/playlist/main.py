@@ -2,16 +2,18 @@ import os
 import sys
 import base64
 import requests
-from typing import Optional
 from PyQt6.QtWidgets import QApplication
 from auth_window import AuthWindow
 from playlist_window import PlaylistWindow
+from communicate import Communicate
+
 
 client_id = '2d7800dcec2241389843e017b8ab5e4d'
 client_secret = '418d5f1d798842fc924c28c8bf6f4124'
 
 app = QApplication(sys.argv)
-auth_window = AuthWindow()
+communicate = Communicate()
+auth_window = AuthWindow(communicate)
 playlist_window = PlaylistWindow()
 
 
@@ -72,13 +74,15 @@ def get_token() -> str | None:
     elif os.path.isfile('../code.txt'):
         code = get_code()
         if code is None:
+            # Solicitar entrar localhost:7777/authorize
             return None
         else:
-            return get_token()
+            token = generate_token(code)
+            return token
 
 
 def check_permissions() -> str | None:
-    user_id: Optional[str] = None
+    user_id: str | None = None
     token = get_token()
 
     if token is not None:
@@ -98,15 +102,28 @@ def check_permissions() -> str | None:
 
     return user_id
 
-
-def main():
+def load_window():
     user_id = check_permissions()
     if user_id is None:
+        playlist_window.close()
         auth_window.show()
     else:
-        playlist_window.show()
+        auth_window.close()
+        token = get_token()
+        playlist_window.load_ui(token, user_id)
+
+
+def main():
+    auth_window.close()
+    playlist_window.close()
+
+    load_window()
+
+    communicate.verify_code.connect(load_window)
 
     app.exec()
 
+
+main()
 
 main()
