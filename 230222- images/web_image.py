@@ -1,15 +1,30 @@
+import sys
+
 import requests
-from PyQt6.QtWidgets import QApplication, QLabel
-from PyQt6.QtGui import QImage, QPixmap
+from PyQt6.QtGui import QPixmap,QImage
+from PyQt6.QtWidgets import QMainWindow, QApplication, QLabel
 
-url_image = ''
 
-app = QApplication([])
-web_image = QImage()
-web_image.loadFromData(requests.get(url_image).content)
+app = QApplication(sys.argv)
 
-image_label = QLabel()
-image_label.setPixmap(QPixmap(web_image))
-image_label.show()
 
-app.exec()
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        self.setWindowTitle("Imagen de Internet")
+
+        label = QLabel(self)
+        url = 'https://www.hogarmania.com/archivos/201204/cerezo01-668x400x80xX.jpg'
+        image = QImage()
+        image.loadFromData(requests.get(url).content)
+
+        pixmap = QPixmap(image)
+        label.setPixmap(pixmap)
+        self.setCentralWidget(label)
+
+
+w = MainWindow()
+w.show()
+sys.exit(app.exec())
+
+
