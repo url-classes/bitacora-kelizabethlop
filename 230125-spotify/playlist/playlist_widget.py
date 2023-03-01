@@ -3,7 +3,7 @@ from track import Track
 from track_widget import TrackWidget
 
 
-class PlayListWidget(QWidget):
+class PlaylistWidget(QWidget):
     def __init__(self, tracks: list[Track]):
         super().__init__()
         layout = QVBoxLayout()
@@ -13,5 +13,3 @@ class PlayListWidget(QWidget):
             layout.addWidget(widget)
 
         self.setLayout(layout)
-
-

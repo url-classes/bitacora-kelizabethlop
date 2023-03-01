@@ -7,7 +7,6 @@ class AuthWindow(QMainWindow):
     def __init__(self, communicate: Communicate):
         super().__init__()
 
-        self.setWindowTitle('Iniciar sesión')
         self.communicate = communicate
 
         login_button = QPushButton('Ingresar')
@@ -15,7 +14,6 @@ class AuthWindow(QMainWindow):
 
         refresh_button = QPushButton('Volver a intentar')
         refresh_button.clicked.connect(self.try_again)
-
         layout = QVBoxLayout()
         layout.addWidget(login_button)
         layout.addWidget(refresh_button)
@@ -30,4 +28,3 @@ class AuthWindow(QMainWindow):
 
     def try_again(self):
         self.communicate.verify_code.emit()
-

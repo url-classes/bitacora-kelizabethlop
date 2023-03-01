@@ -1,5 +1,7 @@
 import os
 import requests
+import base64
+from playlist.main import client_id, client_secret
 
 while True:
     if os.path.isfile('../token.txt'):
@@ -125,4 +127,3 @@ while True:
     option = input('¿Volver a intentar? (s/n): ')
     if option == 'n':
         break
-

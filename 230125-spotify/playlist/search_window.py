@@ -1,9 +1,13 @@
-from PyQt6.QtWidgets import QLabel, QMainWindow, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QApplication, QLineEdit
 from playlist import Playlist
 from os import path
+import sys
 import requests
 from track import Track
-from playlist_widget import PlaylistWidget
+from search_widget import SearchWidget
+
+
+app = QApplication(sys.argv)
 
 
 def get_playlist(token: str, user_id: str) -> Playlist:
@@ -29,7 +33,6 @@ def get_playlist(token: str, user_id: str) -> Playlist:
 
         name = get_playlist_response['name']
         description = get_playlist_response['description']
-
         items = get_playlist_response['tracks']['items']
 
         for item in items:
@@ -38,12 +41,7 @@ def get_playlist(token: str, user_id: str) -> Playlist:
             artists = []
             album = item['track']['album']
             album_cover = album['images'][0]['url']
-            track = Track(
-                track_name,
-                duration,
-                album_cover,
-                artists
-            )
+            track = Track(track_name, duration, album_cover, artists)
             tracks.append(track)
 
     else:
@@ -70,35 +68,39 @@ def get_playlist(token: str, user_id: str) -> Playlist:
     return playlist
 
 
-class PlaylistWindow(QMainWindow):
-    def __init__(self):
+class SearchWindow(QMainWindow):
+    def __init__(self, token: str, user_id: str):
         super().__init__()
+        self.playlist = get_playlist(token, user_id)
+
         self.setWindowTitle('Mi Playlist')
         self.layout = QVBoxLayout()
 
+        self.search_button = QPushButton('Search')
+        self.new_search_button = QPushButton('New Search')
+
         self.title = QLabel()
+        self.title.setText(self.playlist.name)
         self.layout.addWidget(self.title)
 
         self.description = QLabel()
         self.layout.addWidget(self.description)
-
         label = QLabel('Listado de canciones:')
         self.layout.addWidget(label)
+
+        self.textbox = QLineEdit()
+        self.layout.addWidget(self.textbox)
+
+        self.search_button.clicked.connect(self.busqueda)
+        self.layout.addWidget(self.search_button)
+        self.new_search_button.hide()
 
         self.main_widget = QWidget()
         self.main_widget.setLayout(self.layout)
 
         self.setCentralWidget(self.main_widget)
 
-    def load_ui(self, token: str, user_id: str):
-        playlist = get_playlist(token, user_id)
-        self.title.setText(playlist.name)
-        self.description.setText(playlist.description)
-
-        playlist_widget = PlaylistWidget(
-            playlist.tracks
-        )
-
-        self.layout.addWidget(playlist_widget)
-
-        self.show()
+    def busqueda(self):
+        search = self.textbox.text()
+        searchwindow = SearchWidget(self.playlist.tracks, search)
+        self.layout.addWidget(searchwindow)

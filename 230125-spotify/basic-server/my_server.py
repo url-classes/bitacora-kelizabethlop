@@ -17,6 +17,7 @@ class MyServer(BaseHTTPRequestHandler):
             }
             url = 'https://accounts.spotify.com/authorize?'
             webbrowser.open(url + parse.urlencode(auth_headers))
+
         elif parsed_path.path == '/callback':
             query = parsed_path.query
             code = query.split('=')[1]
@@ -27,3 +28,4 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
+
